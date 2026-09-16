@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Бджолиний світ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --honey-deep: #B5750F;
+    --honey: #DE9A2C;
+    --honey-light: #F0B94D;
+    --wax: #F6E8C4;
+    --wax-pale: #FBF3DE;
+    --hive: #241505;
+    --hive-soft: #3B2410;
+    --leaf: #5C7A3F;
+    --leaf-deep: #3F5A2A;
+    --ink: #241505;
+    --paper: #FBF3DE;
+    --line: rgba(36,21,5,0.16);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Work Sans', sans-serif;
+  }
+
+  :root:not([data-theme="light"]) {
+    /* dark scheme fallback stays within brand palette, not generic dark UI */
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img, svg { max-width: 100%; display: block; }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  a { color: inherit; }
+
+  /* ---------- NAV ---------- */
+  header.site {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(251,243,222,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+  .nav .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.01em;
+  }
+  .nav .brand svg { width: 28px; height: 28px; }
+  .nav ul {
+    list-style: none;
+    display: flex;
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+  }
+  .nav ul li a {
+    text-decoration: none;
+    color: var(--hive-soft);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 3px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .nav ul li a:hover { border-color: var(--honey-deep); color: var(--honey-deep); }
+  .nav-toggle { display: none; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--hive);
+    color: var(--wax-pale);
+    padding: 96px 0 0;
+  }
+  .hero .comb-field {
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+    padding-bottom: 70px;
+  }
+  .eyebrow-note {
+    font-size: 15px;
+    color: var(--honey-light);
+    margin: 0 0 18px;
+    font-family: var(--font-body);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(42px, 6vw, 74px);
+    line-height: 1.03;
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--honey-light);
+  }
+  .hero p.lead {
+    font-size: 19px;
+    max-width: 46ch;
+    color: rgba(251,243,222,0.82);
+    margin: 0 0 34px;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 24px;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+  }
+  .btn-primary { background: var(--honey); color: var(--hive); }
+  .btn-primary:hover { background: var(--honey-light); }
+  .btn-ghost { border-color: rgba(251,243,222,0.4); color: var(--wax-pale); }
+  .btn-ghost:hover { border-color: var(--honey-light); color: var(--honey-light); }
+
+  .hero-art { position: relative; }
+
+  .hive-stats {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid rgba(251,243,222,0.18);
+    padding: 26px 0;
+  }
+  .hive-stats .stat { padding: 0 20px; border-left: 1px solid rgba(251,243,222,0.18); }
+  .hive-stats .stat:first-child { border-left: none; padding-left: 0; }
+  .hive-stats .num {
+    font-family: var(--font-display);
+    font-size: 30px;
+    color: var(--honey-light);
+    display: block;
+  }
+  .hive-stats .cap { font-size: 13.5px; color: rgba(251,243,222,0.65); margin-top: 4px; }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section { padding: 96px 0; }
+  .section-head {
+    max-width: 62ch;
+    margin-bottom: 56px;
+  }
+  .section-head .kicker {
+    font-size: 15px;
+    color: var(--honey-deep);
+    font-weight: 600;
+    margin: 0 0 10px;
+  }
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 4vw, 44px);
+    margin: 0 0 14px;
+    line-height: 1.08;
+  }
+  .section-head p { font-size: 17px; color: var(--hive-soft); opacity: 0.85; margin: 0; }
+
+  /* ---------- PRODUCTS: honeycomb grid ---------- */
+  .comb-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+  }
+  .hex {
+    width: 250px;
+    aspect-ratio: 0.92;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: var(--wax-pale);
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 26px;
+    position: relative;
+  }
+  .hex:nth-child(3n+2) { margin-top: 68px; }
+  .hex-icon { width: 46px; height: 46px; margin-bottom: 14px; color: var(--honey-deep); }
+  .hex h3 {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .hex p { font-size: 13.5px; color: var(--hive-soft); opacity: 0.82; margin: 0; line-height: 1.45; }
+
+  /* ---------- MEDICINAL ---------- */
+  .apitherapy {
+    background: var(--hive);
+    color: var(--wax-pale);
+  }
+  .apitherapy .section-head .kicker { color: var(--honey-light); }
+  .apitherapy .section-head p { color: rgba(251,243,222,0.7); }
+  .apitherapy .section-head h2 { color: var(--wax-pale); }
+
+  .remedy-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(251,243,222,0.16);
+    border: 1px solid rgba(251,243,222,0.16);
+  }
+  .remedy {
+    background: var(--hive);
+    padding: 32px 34px;
+  }
+  .remedy .tag {
+    font-size: 13px;
+    color: var(--honey-light);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .remedy h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 22px;
+    margin: 0 0 12px;
+  }
+  .remedy p {
+    font-size: 15px;
+    color: rgba(251,243,222,0.75);
+    margin: 0;
+  }
+  .caution {
+    margin-top: 40px;
+    border-left: 3px solid var(--honey);
+    padding: 4px 0 4px 20px;
+    font-size: 14.5px;
+    color: rgba(251,243,222,0.65);
+    max-width: 70ch;
+  }
+  .caution.on-paper { color: var(--hive-soft); opacity: 0.75; }
+
+  /* ---------- DERIVED PRODUCTS ---------- */
+  .derived-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .derived-card {
+    background: var(--wax-pale);
+    padding: 32px 34px;
+  }
+  .derived-card .tag {
+    font-size: 13px;
+    color: var(--honey-deep);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .derived-card h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 21px;
+    margin: 0 0 12px;
+  }
+  .derived-card p {
+    font-size: 15px;
+    color: var(--hive-soft);
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  /* ---------- HONEY VARIETIES ---------- */
+  .honey-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .honey-card {
+    background: var(--paper);
+    padding: 28px 26px;
+  }
+  .honey-swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    margin-bottom: 18px;
+    border: 1px solid var(--line);
+  }
+  .honey-card h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18.5px;
+    margin: 0 0 8px;
+  }
+  .honey-card p {
+    font-size: 14px;
+    color: var(--hive-soft);
+    opacity: 0.82;
+    margin: 0 0 12px;
+    line-height: 1.5;
+  }
+  .honey-meta {
+    font-size: 12.5px;
+    color: var(--honey-deep);
+    font-weight: 600;
+  }
+
+  /* ---------- SEASONALITY ---------- */
+  .season-strip {
+    margin-top: 80px;
+    border-top: 1px solid var(--line);
+    padding-top: 40px;
+  }
+  .season-strip .label {
+    font-size: 14px;
+    color: var(--honey-deep);
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .season-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .season {
+    border-top: 2px solid var(--honey);
+    padding-top: 14px;
+  }
+  .season .months {
+    font-size: 13px;
+    color: var(--honey-deep);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .season b {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .season p {
+    font-size: 13.5px;
+    color: var(--hive-soft);
+    opacity: 0.82;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  /* ---------- AGRICULTURE ---------- */
+  .agri {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .agri-art { position: relative; }
+  .agri-copy p { font-size: 16.5px; color: var(--hive-soft); margin: 0 0 18px; }
+  .agri-figures {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .figure .num {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--leaf-deep);
+    display: block;
+  }
+  .figure .cap { font-size: 13.5px; color: var(--hive-soft); opacity: 0.8; margin-top: 4px; }
+
+  .crop-strip {
+    margin-top: 90px;
+    border-top: 1px solid var(--line);
+    padding-top: 40px;
+  }
+  .crop-strip .label {
+    font-size: 14px;
+    color: var(--leaf-deep);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .crop-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+  }
+  .crop { font-size: 14.5px; color: var(--hive-soft); border-top: 2px solid var(--leaf); padding-top: 10px; }
+  .crop b { display: block; font-family: var(--font-display); font-size: 16px; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
+
+  /* ---------- CTA / FOOTER ---------- */
+  .closing {
+    background: var(--wax);
+    text-align: center;
+    padding: 90px 0;
+  }
+  .closing h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 42px);
+    max-width: 22ch;
+    margin: 0 auto 20px;
+  }
+  .closing p { max-width: 50ch; margin: 0 auto 34px; color: var(--hive-soft); font-size: 16.5px; }
+
+  footer.site {
+    background: var(--hive);
+    color: rgba(251,243,222,0.55);
+    padding: 36px 0;
+    font-size: 13.5px;
+  }
+  footer.site .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px) {
+    .nav ul { display: none; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hive-stats { grid-template-columns: repeat(2, 1fr); row-gap: 22px; }
+    .hive-stats .stat:nth-child(3) { border-left: none; padding-left: 0; }
+    .agri { grid-template-columns: 1fr; }
+    .remedy-list { grid-template-columns: 1fr; }
+    .derived-grid { grid-template-columns: 1fr; }
+    .honey-grid { grid-template-columns: 1fr; }
+    .season-row { grid-template-columns: repeat(2, 1fr); row-gap: 24px; }
+    .crop-row { grid-template-columns: repeat(2, 1fr); row-gap: 20px; }
+    .hex { width: 44vw; }
+    .hex:nth-child(3n+2) { margin-top: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--honey-deep);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="nav">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M12 2v20M2 7l10 5 10-5M2 17l10-5 10 5" stroke="currentColor" stroke-width="1.4"/></svg>
+      Бджолиний світ
+    </div>
+    <ul>
+      <li><a href="#produkty">Продукти</a></li>
+      <li><a href="#sorty">Сорти меду</a></li>
+      <li><a href="#liky">Лікування</a></li>
+      <li><a href="#pohidni">Похідні</a></li>
+      <li><a href="#agro">Аграрний сектор</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <svg class="comb-field" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <pattern id="combPattern" width="34" height="59" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
+        <polygon points="17,0 34,9.8 34,29.4 17,39.2 0,29.4 0,9.8" fill="none" stroke="#DE9A2C" stroke-width="0.6"/>
+        <polygon points="0,29.4 17,39.2 17,58.8 0,68.6" fill="none" stroke="#DE9A2C" stroke-width="0.6"/>
+      </pattern>
+    </defs>
+    <rect width="400" height="300" fill="url(#combPattern)"/>
+  </svg>
+  <div class="wrap hero-inner">
+    <div>
+      <p class="eyebrow-note">Мед, прополіс, віск, пилок і маточне молочко</p>
+      <h1>Малі трудівниці,<br><em>що годують поле</em></h1>
+      <p class="lead">Все, що бджолина сім'я створює у вулику, — від меду до отрути — має свою користь для здоров'я людини. А без бджіл-запилювачів значна частина врожаю на полях і в садах узагалі не зав'яжеться.</p>
+      <div class="hero-cta">
+        <a href="#produkty" class="btn btn-primary">Продукти бджільництва</a>
+        <a href="#agro" class="btn btn-ghost">Роль в агросекторі</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="180,20 300,90 300,230 180,300 60,230 60,90" fill="#3B2410" stroke="#DE9A2C" stroke-width="1.5"/>
+        <polygon points="180,60 265,108 265,212 180,260 95,212 95,108" fill="#241505" stroke="#F0B94D" stroke-width="1"/>
+        <g transform="translate(120,130)">
+          <ellipse cx="60" cy="55" rx="34" ry="24" fill="#DE9A2C"/>
+          <path d="M30 46 h60 M28 55 h64 M30 64 h60" stroke="#241505" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="102" cy="48" r="13" fill="#F6E8C4"/>
+          <path d="M60 30 Q40 -5 20 15 Q35 35 60 30Z" fill="#FBF3DE" opacity="0.55"/>
+          <path d="M62 30 Q82 -5 102 15 Q87 35 62 30Z" fill="#FBF3DE" opacity="0.55"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="hive-stats">
+      <div class="stat"><span class="num">1/3</span><span class="cap">світового рослинного врожаю залежить від запилення комахами</span></div>
+      <div class="stat"><span class="num">40 000</span><span class="cap">бджіл у типовій робочій сім'ї влітку</span></div>
+      <div class="stat"><span class="num">≈6 тис.</span><span class="cap">квітів відвідує одна бджола щодня</span></div>
+      <div class="stat"><span class="num">200+</span><span class="cap">речовин у складі бджолиного меду</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="produkty">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Продукти життєдіяльності бджіл</p>
+      <h2>Все, що дає вулик</h2>
+      <p>Кожен продукт народжується з іншої залози чи процесу в тілі бджоли — і має власне застосування, від кухні до фармацевтики.</p>
+    </div>
+    <div class="comb-grid">
+      <div class="hex">
+        <svg class="hex-icon" viewBox="0 0 48 48" fill="none"><path d="M8 20c0-8 7-14 16-14s16 6 16 14-7 22-16 22S8 28 8 20Z" stroke="currentColor" stroke-width="1.6"/><path d="M14 20h20M15 27h18M18 34h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>Мед</h3>
+        <p>Нектар, перероблений ферментами бджіл і випарений до густини — природний консервований цукор з мікроелементами.</p>
+      </div>
+      <div class="hex">
+        <svg class="hex-icon" viewBox="0 0 48 48" fill="none"><rect x="10" y="10" width="28" height="28" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M10 19h28M10 29h28M19 10v28M29 10v28" stroke="currentColor" stroke-width="1.2"/></svg>
+        <h3>Віск</h3>
+        <p>Будівельний матеріал вулика, що виділяється восковими залозами; основа для свічок, косметики та кремів.</p>
+      </div>
+      <div class="hex">
+        <svg class="hex-icon" viewBox="0 0 48 48" fill="none"><path d="M24 6c-8 8-14 16-14 24a14 14 0 0 0 28 0c0-8-6-16-14-24Z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <h3>Прополіс</h3>
+        <p>Смолиста «бджолина замазка» з бруньок дерев — герметизує вулик і має виражені антимікробні властивості.</p>
+      </div>
+      <div class="hex">
+        <svg class="hex-icon" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="14" stroke="currentColor" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="currentColor"/></svg>
+        <h3>Квітковий пилок</h3>
+        <p>Зібраний бджолами білковий корм для розплоду — концентрат амінокислот, вітамінів і рослинних сполук.</p>
+      </div>
+      <div class="hex">
+        <svg class="hex-icon" viewBox="0 0 48 48" fill="none"><path d="M24 8c6 6 12 13 12 20a12 12 0 0 1-24 0c0-7 6-14 12-20Z" fill="currentColor" opacity="0.9"/></svg>
+        <h3>Маточне молочко</h3>
+        <p>Секрет глоткових залоз бджіл-годувальниць, яким вигодовують матку — найбільш концентрований з продуктів вулика.</p>
+      </div>
+      <div class="hex">
+        <svg class="hex-icon" viewBox="0 0 48 48" fill="none"><path d="M24 6v20M24 26l-8 16M24 26l8 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="24" cy="6" r="3" fill="currentColor"/></svg>
+        <h3>Бджолина отрута</h3>
+        <p>Апітоксин, що виробляється жалоносним апаратом — застосовується дозовано в апітерапії суглобових захворювань.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sorty">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Сорти меду та сезонність</p>
+      <h2>Мед такий, які квіти навколо пасіки</h2>
+      <p>Колір, смак і швидкість кристалізації меду залежать від рослин, з яких бджоли зібрали нектар. А ці рослини, своєю чергою, цвітуть у певний час — тож сезон визначає, який мед з'явиться на столі.</p>
+    </div>
+    <div class="honey-grid">
+      <div class="honey-card">
+        <div class="honey-swatch" style="background:#F5E9A8"></div>
+        <h3>Акацієвий</h3>
+        <p>Майже прозорий, світло-жовтий, з делікатним смаком. Кристалізується найповільніше — місяцями лишається рідким.</p>
+        <div class="honey-meta">Збір: травень–червень</div>
+      </div>
+      <div class="honey-card">
+        <div class="honey-swatch" style="background:var(--honey)"></div>
+        <h3>Квітковий (поліфлорний)</h3>
+        <p>Золотисто-бурштиновий, з багатим букетом лугових трав. Найпоширеніший і найбільш універсальний тип меду.</p>
+        <div class="honey-meta">Збір: протягом усього сезону</div>
+      </div>
+      <div class="honey-card">
+        <div class="honey-swatch" style="background:#D9A227"></div>
+        <h3>Липовий</h3>
+        <p>Світло-бурштиновий із зеленуватим відтінком, зі свіжою ментоловою ноткою. Традиційно застосовують при застудах.</p>
+        <div class="honey-meta">Збір: кінець червня–липень</div>
+      </div>
+      <div class="honey-card">
+        <div class="honey-swatch" style="background:#6B4423"></div>
+        <h3>Гречаний</h3>
+        <p>Темно-коричневий, насичений, з легкою гіркуватістю. Багатий на залізо та антиоксиданти.</p>
+        <div class="honey-meta">Збір: липень</div>
+      </div>
+      <div class="honey-card">
+        <div class="honey-swatch" style="background:#F2C230"></div>
+        <h3>Соняшниковий</h3>
+        <p>Яскраво-жовтий, з легким ароматом. Кристалізується швидко — вже за кілька тижнів після відкачки.</p>
+        <div class="honey-meta">Збір: липень–серпень</div>
+      </div>
+      <div class="honey-card">
+        <div class="honey-swatch" style="background:var(--honey-deep)"></div>
+        <h3>Різнотрав'я</h3>
+        <p>Від бурштинового до темно-янтарного, зі смаком, що змінюється залежно від лугу, де стоїть пасіка.</p>
+        <div class="honey-meta">Збір: липень–серпень</div>
+      </div>
+    </div>
+
+    <div class="season-strip">
+      <p class="label">Медозбірний календар</p>
+      <div class="season-row">
+        <div class="season">
+          <div class="months">Квітень–травень</div>
+          <b>Весняний взяток</b>
+          <p>Цвітуть сади, акація, кульбаба — перший, найсвітліший мед сезону.</p>
+        </div>
+        <div class="season">
+          <div class="months">Червень</div>
+          <b>Початок літа</b>
+          <p>Цвіте липа, стартує гречка — липовий мед і перші качки гречаного.</p>
+        </div>
+        <div class="season">
+          <div class="months">Липень–серпень</div>
+          <b>Головний взяток</b>
+          <p>Розпал цвітіння соняшника й різнотрав'я — основна маса товарного меду сезону.</p>
+        </div>
+        <div class="season">
+          <div class="months">Вересень</div>
+          <b>Згасання сезону</b>
+          <p>Квітування слабшає, бджоли готуються до зими — останні відкачки й поповнення кормових запасів.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="apitherapy" id="liky">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Апітерапія</p>
+      <h2>Лікувальне застосування продуктів вулика</h2>
+      <p>Народна та традиційна медицина здавна використовує продукти бджільництва — сучасні дослідження підтверджують частину цих властивостей, хоча апітерапія не замінює призначене лікування.</p>
+    </div>
+    <div class="remedy-list">
+      <div class="remedy">
+        <div class="tag">Мед</div>
+        <h3>Горло та рани</h3>
+        <p>Пом'якшує подразнене горло, має природну антибактеріальну дію завдяки перекису водню й низькій вологості; медичний мед use для обробки поверхневих ран.</p>
+      </div>
+      <div class="remedy">
+        <div class="tag">Прополіс</div>
+        <h3>Імунна підтримка</h3>
+        <p>Настоянки й екстракти застосовують при застудах та подразненнях ротової порожнини завдяки протимікробним і протизапальним сполукам смоли.</p>
+      </div>
+      <div class="remedy">
+        <div class="tag">Маточне молочко</div>
+        <h3>Тонус і відновлення</h3>
+        <p>Використовується як загальнозміцнюючий засіб — багате на білки, вітаміни групи B та унікальні жирні кислоти вулика.</p>
+      </div>
+      <div class="remedy">
+        <div class="tag">Бджолина отрута</div>
+        <h3>Суглоби та ревматизм</h3>
+        <p>Апітоксин-терапію (у т.ч. контрольовані укуси) застосовують для полегшення симптомів артриту під наглядом фахівця.</p>
+      </div>
+      <div class="remedy">
+        <div class="tag">Пилок</div>
+        <h3>Живлення й енергія</h3>
+        <p>Джерело рослинного білка та мікроелементів, яке додають у раціон для підтримки витривалості й відновлення після навантажень.</p>
+      </div>
+      <div class="remedy">
+        <div class="tag">Перга</div>
+        <h3>Травлення</h3>
+        <p>Ферментований у стільниках пилок легше засвоюється й традиційно використовується для підтримки мікрофлори кишківника.</p>
+      </div>
+    </div>
+    <p class="caution">Продукти бджільництва можуть викликати алергічні реакції, особливо в людей з чутливістю до пилку чи бджолиних укусів. Перед застосуванням з лікувальною метою варто порадитися з лікарем.</p>
+  </div>
+</section>
+
+<section id="pohidni">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="kicker">Похідні препарати</p>
+      <h2>Суміжні продукти на основі вулика</h2>
+      <p>Із сировини вулика та бджолиної сім'ї готують спиртові настоянки й мазі, що концентрують діючі речовини для зовнішнього та внутрішнього застосування.</p>
+    </div>
+    <div class="derived-grid">
+      <div class="derived-card">
+        <div class="tag">Настоянка</div>
+        <h3>На прополісі</h3>
+        <p>Спиртова витяжка з прополісу — застосовують для полоскання горла, обробки ясен і компресів при застудних захворюваннях.</p>
+      </div>
+      <div class="derived-card">
+        <div class="tag">Настоянка</div>
+        <h3>На восковій молі (ПЖВМ)</h3>
+        <p>Продукт життєдіяльності воскової молі: спиртовий екстракт личинок вогнівки, який традиційно застосовують для підтримки дихальної та серцево-судинної систем.</p>
+      </div>
+      <div class="derived-card">
+        <div class="tag">Настоянка</div>
+        <h3>На бджолиному підморі</h3>
+        <p>Настоянка з тіл природно відмерлих бджіл, багата на хітозан і меланін — використовують при суглобових болях і для загального зміцнення організму.</p>
+      </div>
+      <div class="derived-card">
+        <div class="tag">Мазь</div>
+        <h3>Прополісна мазь</h3>
+        <p>Прополіс на основі бджолиного воску чи вазеліну — для загоєння ран, тріщин шкіри, подразнень і дрібних опіків.</p>
+      </div>
+      <div class="derived-card">
+        <div class="tag">Продукт</div>
+        <h3>Перга (бджолиний хліб)</h3>
+        <p>Пилок, законсервований бджолами в стільниках і ферментований молочнокислими бактеріями — легше засвоюється організмом і традиційно застосовується для підтримки травлення та імунітету.</p>
+      </div>
+      <div class="derived-card">
+        <div class="tag">Продукт</div>
+        <h3>Пилок-обніжжя</h3>
+        <p>Гранули пилку, які бджоли зібрали з квітів і принесли у вулик на задніх лапках — джерело рослинного білка, вітамінів і мінералів, що вживають як харчову добавку.</p>
+      </div>
+      <div class="derived-card">
+        <div class="tag">Продукт</div>
+        <h3>Трутневий гомогенат</h3>
+        <p>Гомогенізований трутневий розплід певного віку — багатий на білки, жирні кислоти та прогормони, застосовують для загального тонізування організму й підтримки гормонального балансу.</p>
+      </div>
+    </div>
+    <p class="caution on-paper">Дозування настоянок і тривалість курсу застосування варто узгоджувати з лікарем, особливо за наявності алергії на продукти бджільництва.</p>
+  </div>
+</section>
+
+<section id="agro">
+  <div class="wrap">
+    <div class="agri">
+      <div class="agri-copy">
+        <p class="kicker" style="color:var(--leaf-deep); font-weight:600; font-size:15px; margin-bottom:10px;">Роль бджіл в аграрному секторі</p>
+        <h2 style="font-family:var(--font-display); font-size:clamp(28px,4vw,40px); font-weight:600; line-height:1.08; margin:0 0 20px;">Запилювачі, що тримають на собі врожай</h2>
+        <p>Перелітаючи з квітки на квітку в пошуках нектару, бджола переносить пилок і запліднює рослини. Без цього процесу зав'язь плоду просто не утворюється — байдуже, наскільки родючим є ґрунт чи скільки добрив внесено.</p>
+        <p>Для садів, ягідників і олійних культур господарства часто орендують пасіки на період цвітіння: вулики підвозять просто до полів, щоб підвищити врожайність і якість плодів.</p>
+        <div class="agri-figures">
+          <div class="figure"><span class="num">75%</span><span class="cap">основних продовольчих культур світу частково залежать від запилення тваринами й комахами</span></div>
+          <div class="figure"><span class="num">×1.5–2</span><span class="cap">можливе зростання врожайності ягідних і плодових культур при достатньому запиленні</span></div>
+        </div>
+      </div>
+      <div class="agri-art" aria-hidden="true">
+        <svg viewBox="0 0 400 420" xmlns="http://www.w3.org/2000/svg">
+          <path d="M60 380 C60 260 120 200 200 200 C280 200 340 260 340 380" fill="none" stroke="var(--leaf)" stroke-width="2"/>
+          <g stroke="var(--leaf)" stroke-width="2" fill="none">
+            <path d="M100 380 V300 Q100 270 130 260"/>
+            <path d="M150 380 V260"/>
+            <path d="M200 380 V230"/>
+            <path d="M250 380 V260"/>
+            <path d="M300 380 V300 Q300 270 270 260"/>
+          </g>
+          <g fill="var(--honey)">
+            <circle cx="130" cy="255" r="9"/><circle cx="150" cy="255" r="9"/><circle cx="200" cy="225" r="9"/><circle cx="250" cy="255" r="9"/><circle cx="270" cy="255" r="9"/>
+          </g>
+          <g transform="translate(210,150)">
+            <ellipse cx="0" cy="0" rx="20" ry="14" fill="var(--hive)"/>
+            <path d="M-10 -6 h20 M-11 0 h22 M-10 6 h20" stroke="var(--honey)" stroke-width="3.4" stroke-linecap="round"/>
+            <circle cx="18" cy="-3" r="7" fill="var(--hive-soft)"/>
+            <path d="M-4 -14 Q-18 -34 -34 -20 Q-22 -8 -4 -14Z" fill="var(--wax)" opacity="0.7"/>
+            <path d="M0 -14 Q14 -34 30 -20 Q18 -8 0 -14Z" fill="var(--wax)" opacity="0.7"/>
+          </g>
+          <line x1="60" y1="380" x2="340" y2="380" stroke="var(--line)" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="crop-strip">
+      <p class="label">Культури, врожайність яких напряму залежить від бджіл-запилювачів</p>
+      <div class="crop-row">
+        <div class="crop"><b>Соняшник</b>олійність і наповненість насіння</div>
+        <div class="crop"><b>Яблуня</b>зав'язь і форма плоду</div>
+        <div class="crop"><b>Гречка</b>обсяг та якість зерна</div>
+        <div class="crop"><b>Ріпак</b>врожайність насіння</div>
+        <div class="crop"><b>Огірки</b>кількість зав'язі</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <h2>Кожна ложка меду — це тисячі вильотів у поле</h2>
+    <p>Бджоли пов'язують екосистему, стіл людини й аграрне виробництво в один цикл. Підтримка пасік — це турбота не лише про мед, а й про врожай завтрашнього дня.</p>
+    <a href="#produkty" class="btn btn-primary">До продуктів вулика</a>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Бджолиний світ</span>
+    <span>Продукти бджільництва · Апітерапія · Запилення</span>
+  </div>
+</footer>
+
+</body>
+</html>
